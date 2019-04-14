@@ -2,24 +2,24 @@
 
 
 #include "FPSObjectiveActor.h"
-#include "Components/StaticMeshComponents.h"
+#include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
-AFPSObjectiveActor::AFPSObjectiveActor(ECollisionEnabled::NoCollision)
+AFPSObjectiveActor::AFPSObjectiveActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
   MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
-  MeshComp->SetCollisionEnabled()
+  MeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
   RootComponent = MeshComp;
 
   SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
   SphereComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
   SphereComp->SetCollisionResponseToAllChannels(ECR_Ignore);
-  SphereComp->SetCollisionResponseToAllChannels(ECC_Pawn, ECR_Overlap);
+  SphereComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
   SphereComp->SetupAttachment(MeshComp);
 
 }
@@ -35,7 +35,7 @@ void AFPSObjectiveActor::BeginPlay()
 
 void AFPSObjectiveActor::PlayEffects()
 {
-  UGamePlayStatics::SpawnEmitteratLocation(this, PickupFX, GetActorLocation());
+  UGameplayStatics::SpawnEmitterAtLocation(this, PickupFX, GetActorLocation());
 }
 
 // Called every frame
