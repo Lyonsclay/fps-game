@@ -25,7 +25,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USphereComponent*	SphereComp;
 
-	UPROPERTY(EditDefaultsONly, Category = "Effects")
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
 	UParticleSystem* PickupFX;
 
 	// Called when the game starts or when spawned
