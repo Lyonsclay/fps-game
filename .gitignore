@@ -71,3 +71,5 @@ Intermediate/*
 DerivedDataCache/*
 
 Binaries/*/**
+
+.DS_Store

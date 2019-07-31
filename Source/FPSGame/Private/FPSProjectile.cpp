@@ -3,6 +3,7 @@
 #include "FPSProjectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
+#include "Components/StaticMeshComponent.h"
 
 AFPSProjectile::AFPSProjectile() 
 {
@@ -11,6 +12,20 @@ AFPSProjectile::AFPSProjectile()
 	CollisionComp->InitSphereRadius(5.0f);
 	CollisionComp->SetCollisionProfileName("Projectile");
 	CollisionComp->OnComponentHit.AddDynamic(this, &AFPSProjectile::OnHit);	// set up a notification for when this component hits something blocking
+	// Create and position a mesh component so we can see where our sphere is
+	UStaticMeshComponent* SphereVisual = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualRepresentation"));
+	SphereVisual->SetupAttachment(CollisionComp);
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> SphereVisualAsset(TEXT("/Game/StarterContent/Shapes/Shape_Sphere.Shape_Sphere"));
+
+	static ConstructorHelpers::FObjectFinder <UMaterial>Material_Blue(TEXT("/Game/Materials/M_Metal_Chrome.M_Metal_Chrome"));
+
+	if (SphereVisualAsset.Succeeded())
+    {
+			SphereVisual->SetStaticMesh(SphereVisualAsset.Object);
+			SphereVisual->SetRelativeLocation(FVector(0.0f, 0.0f, -80.0f));
+			SphereVisual->SetWorldScale3D(FVector(1.8f));
+			SphereVisual->SetMaterial(0, Material_Blue.Object);
+     }
 
 	// Players can't walk on it
 	CollisionComp->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
